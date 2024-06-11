@@ -1,0 +1,14 @@
+<main class="main"> 
+  <div class="inputs">
+    <input type="number" [(ngModel)]="input1" placeholder="Enter number 1">
+    <input type="number" [(ngModel)]="input2" placeholder="Enter number 2">
+    <input type="number" [(ngModel)]="input3" placeholder="Enter number 3">
+    <input type="number" [(ngModel)]="input4" placeholder="Enter number 4">
+    <button (click)="submitNumbers()">Submit</button>
+
+    @if (apiResponse) {
+    <pre>{{ apiResponse | json }}</pre>
+    }
+  </div>
+  <canvas id="canvas"></canvas>
+</main>
