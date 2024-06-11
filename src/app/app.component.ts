@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   constructor(private renderer: Renderer2, private el: ElementRef, private http: HttpClient) { }
 
   ngOnInit() {
-    this.loadScript('/home/user/diaweb-frontend/public/animation.js');
+    this.loadScript('animation.js'); // No need to specify the full path cuz Angular will look in the public folder
   }
 
   private loadScript(scriptUrl: string) {
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
       }
     }
 
-    const observable: Observable<any> = this.http.post<any>('https://8000-idx-diaweb-backend-1718093896779.cluster-6yqpn75caneccvva7hjo4uejgk.cloudworkstations.dev/hello', data);
+    const observable: Observable<any> = this.http.post<any>('http://127.0.0.1:8000/api/predict_digits', { data });
 
     observable.subscribe({
       next: (response: any) => {
