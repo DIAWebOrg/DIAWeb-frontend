@@ -13,10 +13,10 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent implements OnInit {
 
-  input1: number = 0;
-  input2: number = 0;
-  input3: number = 0;
-  input4: number = 0;
+  input1: number | null = null;
+  input2: number | null = null;
+  input3: number | null = null;
+  input4: number | null = null;
   apiResponse: any;
 
   constructor(private renderer: Renderer2, private el: ElementRef, private http: HttpClient) { }
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
       }
     }
 
-    const observable: Observable<any> = this.http.post<any>('http://127.0.0.1:8000/api/predict_digits', { data });
+    /*const observable: Observable<any> = this.http.post<any>('http://127.0.0.1:8000/api/predict_digits', { data });
 
     observable.subscribe({
       next: (response: any) => {
@@ -62,6 +62,6 @@ export class AppComponent implements OnInit {
       error: (error: any) => {
         console.error('Error sending POST request', error);
       }
-    });
+    });*/
   }
 }
