@@ -13,6 +13,8 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent implements OnInit {
 
+  title: string = 'DIAWeb';
+
   input1: number | null = null;
   input2: number | null = null;
   input3: number | null = null;
@@ -52,7 +54,7 @@ export class AppComponent implements OnInit {
       }
     }
 
-    /*const observable: Observable<any> = this.http.post<any>('http://127.0.0.1:8000/api/predict_digits', { data });
+    const observable: Observable<any> = this.http.post<any>('http://127.0.0.1:8000/api/predict_digits', { data });
 
     observable.subscribe({
       next: (response: any) => {
@@ -62,6 +64,6 @@ export class AppComponent implements OnInit {
       error: (error: any) => {
         console.error('Error sending POST request', error);
       }
-    });*/
+    });
   }
 }
