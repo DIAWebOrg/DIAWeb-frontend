@@ -1,27 +1,76 @@
-# Myapp
+<a name="top"></a>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.2.
+# DIAWeb backend
 
-## Development server
+![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=flat-square&logo=angular&logoColor=white)
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Status](https://img.shields.io/badge/status-alpha-orange)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+<details>  
+<summary><b>Table of contents</b></summary>
+  
+1. [Introduction](#introduction)
+2. [Project structure](#project-structure)
+3. [Installing Dependencies](#installing-dependencies)
+4. [Running the Project](#running-the-project)
+5. [Contact data](#contact-data)
+6. [License](LICENSE.md)
+</details>
 
-## Code scaffolding
+## Introduction
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+DIAWeb is a web application that allows the user to calculate their risk of suffering diabetes, based on an artificial intelligence powered model. This project is the frontend of it, i.e., the GUI that allows the user to compute such risk based on a range of biochemical markers.
 
-## Build
+## Project structure
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- `.github/`: Contains dependabot configuration along with workflow file
+- `.idx/`: Contains the file to build the development environment using nix package manager
+- `public/`: Contains media assets
+- `src/`: Main folder that contains the source code
+  - `app/`: The core of the application where all Angular components, services, and models are
+    - `app.component.html`: Template for main component
+    - `app.component.scss`: Styles for main component
+    - `app.component.spec.ts`: Unit tests for main component
+    - `app.component.ts`: Main component TypeScript logic
+    - `app.config.ts`: Main component configuration
+    - `app.routes.ts`: Routing specification
+  - `index.html`: The main HTML file that is the entry point for the web application
+  - `main.ts`: The main entry point for the Angular application
+  - `styles.scss`: Global styles for the application
+- `angular.json`: Angular configuration
+- `package-lock.json`: Automatically generated file that locks the versions of the project's dependencies.
+- `package.json`: Contains metadata about the project and its dependencies.
+- `tailwind.config.js`: Configuration file for Tailwind CSS.
+- `tsconfig.app.json`: TypeScript configuration specific to the Angular application.
+- `tsconfig.json`: Base TypeScript configuration file.
+- `tsconfig.spec.json`: TypeScript configuration for unit tests.
+- `.gitignore`: Folders not to include in the repository
+- `LICENSE.md`: MIT license of the project
+- `CODE_OF_CONDUCT.md`: Behavioural guidelines for contributors
+- `README.md`: A briefing of the project and how to run it
+- `SECURITY.md`: Briefing of the security policy
+- `requirements.txt`: List of Python dependencies of the project
 
-## Running unit tests
+## Installing Dependencies
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+You can install the project's dependencies specified in the `package.json` file. Run the following command:
 
-## Running end-to-end tests
+```bash
+npm install
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+This will install all the necessary packages for this project.
 
-## Further help
+## Running the Project
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+To run the project, run
+
+```bash
+npm run start
+```
+
+## Contact data
+
+If you have any request or inquiry, feel free to contact me at [pabcabmar3@alum.us.es](mailto:pabcabmar3@alum.us.es)
+
+<a href="#top">Back to Top</a>
