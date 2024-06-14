@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
@@ -33,17 +33,19 @@ describe('AppComponent', () => {
   });
 
   // backend tests
-  it('should call HttpClient.post on submitNumbers', () => {
+  it('should call HttpClient.post on submitProfile', () => {
     httpClientSpy.post.and.returnValue(of({}));
-    component.submitNumbers();
+    component.submitProfile();
     expect(httpClientSpy.post.calls.count()).withContext('one call').toBe(1);
   });
 
-  it('should update apiResponse after HttpClient.post', () => {
-    const expectedResponse = { data: '123' };
-    httpClientSpy.post.and.returnValue(of(expectedResponse));
-
-    component.submitNumbers();
+  it('should update apiResponse after HttpClient.post', fakeAsync(() => {
+    const expectedResponse = 1.23; // Directly use the expected number
+    httpClientSpy.post.and.returnValue(of({ prediction: [[{ toFixed: () => 1.23 }]] }));
+    component.submitProfile();
+    tick(); // Wait for all asynchronous operations to complete
+    console.log('apiResponse after submitProfile:', component.apiResponse);
     expect(component.apiResponse).withContext('apiResponse should be updated').toEqual(expectedResponse);
-  });
+    flush(); // Ensure no more tasks are left
+  }));
 });

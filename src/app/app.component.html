@@ -2,17 +2,16 @@
   <div class="relative flex flex-col justify-center items-center z-10 backdrop-filter backdrop-blur-lg p-10 rounded-lg w-auto">
     
     <div class="flex flex-row justify-center items-center">
-      <input type="number" class="no-arrows text-center rounded-lg w-40 h-20 m-2 smooth-border" [(ngModel)]="input1">
-      <input type="number" class="no-arrows text-center rounded-lg w-40 h-20 m-2 smooth-border" [(ngModel)]="input2">
-      <input type="number" class="no-arrows text-center rounded-lg w-40 h-20 m-2 smooth-border" [(ngModel)]="input3">
-      <input type="number" class="no-arrows text-center rounded-lg w-40 h-20 m-2 smooth-border" [(ngModel)]="input4">
-      <button class="btn btn-white btn-animate w-40 h-20 m-2 text-3xl rounded-full transform" (click)="submitNumbers()">Submit</button>
+      <!-- First the actual button (hidden) and then the visual button -->
+      <input type="file" id="fileUpload" accept=".xlsx, .xls" (change)="onFileChange($event)" style="display:none;">
+      <button class="btn btn-white btn-animate w-40 h-20 m-2 text-3xl rounded-full transform" (click)="triggerFileUpload()">Upload File</button>
+      <button class="btn btn-white btn-animate w-40 h-20 m-2 text-3xl rounded-full transform" (click)="submitProfile()">Submit</button>
     </div>
 
     @if (apiResponse) {
-      <pre>{{ apiResponse | json }}</pre>
+      <pre class="text-3xl mt-4">{{ apiResponse | json }}</pre>
     } @else {
-      <p class="text-3xl">-Placeholder-</p>
+      <p class="text-3xl mt-4">{{ selectedFileName }}</p>
     }
     
   </div>
