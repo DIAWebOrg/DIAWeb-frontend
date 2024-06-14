@@ -3,6 +3,7 @@
 # DIAWeb backend
 
 ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=flat-square&logo=angular&logoColor=white)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DIAWebOrg_DIAWeb-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DIAWebOrg_DIAWeb-frontend)
 [![Run Tests](https://github.com/DIAWebOrg/DIAWeb-frontend/actions/workflows/tests.yaml/badge.svg)](https://github.com/DIAWebOrg/DIAWeb-frontend/actions/workflows/tests.yaml)
 ![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
