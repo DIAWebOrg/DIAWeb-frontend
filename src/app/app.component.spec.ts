@@ -43,9 +43,7 @@ describe('AppComponent', () => {
     const expectedResponse = 1.23; // Directly use the expected number
     httpClientSpy.post.and.returnValue(of({ prediction: [[{ toFixed: () => 1.23 }]] }));
     component.submitProfile();
-    tick(); // Wait for all asynchronous operations to complete
     console.log('apiResponse after submitProfile:', component.apiResponse);
     expect(component.apiResponse).withContext('apiResponse should be updated').toEqual(expectedResponse);
-    flush(); // Ensure no more tasks are left
   }));
 });

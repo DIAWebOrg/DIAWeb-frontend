@@ -74,13 +74,3 @@
         transform: translateY(0px);
     }
 }
-
-.smooth-border {
-  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  outline: none;
-}
-
-.smooth-border:focus {
-  box-shadow: 0 0 10px #9c27b0, 0 0 20px #9c27b0, 0 0 30px #9c27b0, 0 0 40px #9c27b0;
-  transition: box-shadow 0.3s ease-in-out;
-}
