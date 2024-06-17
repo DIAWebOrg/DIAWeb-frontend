@@ -8,6 +8,13 @@
   <div
     class="relative flex flex-col justify-center items-center z-10 backdrop-filter backdrop-blur-lg p-10 rounded-lg w-auto">
 
+    <!-- API Key redeeming -->
+    <div class="flex flex-row justify-center items-center mt-4">
+      <input type="text" id="license-input" placeholder="Enter your license here"
+        class="input input-bordered w-full max-w-xs" />
+      <button class="btn btn-primary ml-2" (click)="submitApiKey()">Redeem</button>
+    </div>
+
     <div class="flex flex-row justify-center items-center">
       <!-- First the actual button (hidden) and then the visual button -->
       <input type="file" id="fileUpload" accept=".xlsx, .xls" (change)="onFileChange($event)" style="display:none;">
@@ -20,17 +27,14 @@
     @if (apiResponse) {
     <pre class="font-poppins text-3xl mt-4">{{ apiResponse | json }}</pre>
     } @else {
-    @if (selectedFileName && selectedFileName !== 'Select a file to upload') {
-      <div class="flex flex-row items-center">
-        <img src="excel.png" alt="Excel Logo" class="w-10 mr-4">
-        <p class="font-poppins text-3xl mt-4">{{ selectedFileName }}</p>
-      </div>
-    
+    @if (selectedFileName == null) {
+    <p class="font-poppins text-3xl mt-4"> Select a file to upload </p>
     } @else {
+    <div class="flex flex-row items-center">
+      <img src="excel.png" alt="Excel Logo" class="w-10 mr-4">
       <p class="font-poppins text-3xl mt-4">{{ selectedFileName }}</p>
+    </div>
     }
-    
-
     }
 
   </div>
