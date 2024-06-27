@@ -15,6 +15,9 @@ jobs:
       with:
         node-version: 20
 
+    - name: Create environment file
+      run: cp src/environments/environment.sample.ts src/environments/environment.ts
+
     - name: Install dependencies
       run: npm ci
 
