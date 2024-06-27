@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule for template-driven forms
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ApiService } from './services/api.service';
 import { DataProcessingService } from './services/dataprocessing.service';
 import { DataToSubmit } from './services/models';
@@ -11,9 +11,9 @@ import { ScriptLoaderService } from './services/scriptloader.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   title: string = 'DIAWeb';
   selectedFileName: string | null = null;
@@ -21,6 +21,10 @@ export class AppComponent implements OnInit {
     data: null
   };
   apiResponse: number | null = null;
+  apiKey: string | null = null;
+  remainingAPIRequests: number | string = '';
+
+  private subscriptions = new Subscription();
 
   constructor(
     private scriptLoaderService: ScriptLoaderService,
@@ -29,32 +33,65 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.scriptLoaderService.loadScript('animation.js'); // No need to specify the full path cuz Angular will look in the public folder
+    this.apiKey = localStorage.getItem('X-API-KEY')
+    if (this.apiKey) {
+      this.getRemainingAPIRequests(this.apiKey);
+    }
+    
+    this.scriptLoaderService.loadScript('animation.js');
 
-    this.dataProcessingService.dataProcessed.subscribe(data => {
+    this.subscriptions.add(this.dataProcessingService.dataProcessed.subscribe(data => {
       this.selectedFileName = data.selectedFileName;
       this.dataToSubmit = data.transformedData;
-    });
+    }));
 
-    this.apiService.onDataReceived.subscribe((data: number) => {
+    this.subscriptions.add(this.apiService.onDataReceived.subscribe((data: number) => {
       this.apiResponse = data;
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   onFileChange(event: Event) {
-    this.dataProcessingService.onFileChange(event);
+    this.dataProcessingService.onFileChange(event).subscribe({
+      error: (e) => alert(e)
+    });
+
   }
 
   triggerFileUpload(): void {
     document.getElementById('fileUpload')?.click();
   }
 
-  submitProfile() {
-    this.apiService.submitProfile(this.dataToSubmit);
+  submitProfile() { // profile as in "biochemical profile"
+    this.apiService.submitProfile(this.dataToSubmit).subscribe({
+      next: (data) => {
+        this.apiResponse = data;
+        this.remainingAPIRequests = (this.remainingAPIRequests as number) - 1;
+      },
+      error: (e) => alert(e)
+    });
   }
 
-  submitApiKey() {
-    const apiKey = (document.getElementById('license-input') as HTMLInputElement).value; // get the value of the input field
-    localStorage.setItem('X-API-KEY', apiKey);
+  submitApiKey(license: string, inputElement: HTMLInputElement) {
+    this.getRemainingAPIRequests(license); // Update the remaining API calls immediately
+    inputElement.value = ''; // Clear the input box
+  }
+
+  getRemainingAPIRequests(license: string) {
+    if (license) {
+      this.apiService.getRemainingAPIRequests(license).subscribe({
+        next: (data) => {
+          localStorage.setItem('X-API-KEY', license);
+          this.apiKey = license; // Update the apiKey property with the new value
+          this.remainingAPIRequests = data;
+        },
+        error: (error) => {
+          alert(error);
+        }
+      });
+    }
   }
 }

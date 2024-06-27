@@ -1,42 +1,55 @@
 <main class="relative w-full min-h-screen flex justify-center items-center">
+  <!-- Banner at the top with grey background -->
+  <div
+    class="absolute top-0 left-0 w-full flex justify-between items-center z-20 backdrop-filter backdrop-blur-lg p-10">
+    <!-- Logo and Slogan aligned to the left -->
+    <div class="flex flex-row items-center">
+      <img src="logo.png" class="w-24 z-10 mr-2">
+      <p class="font-poppins text-xl z-10 text-gray-500">AI-powered diabetes risk prediction</p>
+    </div>
 
-  <div class="flex flex-row items-center absolute top-0 left-0 m-4">
-    <img src="logo.png" class="w-40 z-10 mr-2">
-    <p class="font-poppins text-2xl z-10 text-pink-500 font-bold">AI-powered diabetes risk prediction</p>
+    <!-- API Key redeeming aligned to the right -->
+    <div class="flex flex-row justify-end items-center">
+      <input #apiKeyInput type="text" id="license-input" placeholder="Enter your license here"
+        class="font-poppins text-center text-xl text-gray-500 w-60 h-20 rounded-full smooth-border"/>
+      <button class="font-poppins btn btn-white btn-animate w-60 h-20 m-2 text-xl rounded-full transform"
+        (click)="submitApiKey(apiKeyInput.value, apiKeyInput)">Redeem</button>
+    </div>
+    <!-- Remaining API requests -->
+    <div class="font-poppins text-xl text-gray-500">
+      @if (apiKey) {
+      <p>{{ remainingAPIRequests }} uses left.</p>
+      } @else {
+      <p>No license detected</p>
+      }
+    </div>
   </div>
+
 
   <div
     class="relative flex flex-col justify-center items-center z-10 backdrop-filter backdrop-blur-lg p-10 rounded-lg w-auto">
-
-    <!-- API Key redeeming -->
-    <div class="flex flex-row justify-center items-center mt-4">
-      <input type="text" id="license-input" placeholder="Enter your license here"
-        class="input input-bordered w-full max-w-xs" />
-      <button class="btn btn-primary ml-2" (click)="submitApiKey()">Redeem</button>
-    </div>
-
     <div class="flex flex-row justify-center items-center">
-      <!-- First the actual button (hidden) and then the visual button -->
+      <!-- File Upload -->
       <input type="file" id="fileUpload" accept=".xlsx, .xls" (change)="onFileChange($event)" style="display:none;">
-      <button class="font-poppins btn btn-white btn-animate w-60 h-20 m-2 text-3xl rounded-full transform"
+      <button class="font-poppins btn btn-white btn-animate w-60 h-20 m-2 text-xl rounded-full transform"
         (click)="triggerFileUpload()">Upload File</button>
-      <button class="font-poppins btn btn-white btn-animate w-60 h-20 m-2 text-3xl rounded-full transform"
+      <button class="font-poppins btn btn-white btn-animate w-60 h-20 m-2 text-xl rounded-full transform"
         (click)="submitProfile()">Submit</button>
     </div>
 
+    <!-- API Response or File Selection Info -->
     @if (apiResponse) {
-    <pre class="font-poppins text-3xl mt-4">{{ apiResponse | json }}</pre>
+    <pre class="font-poppins text-xl text-gray-500 mt-4">{{ apiResponse | json }}</pre>
     } @else {
     @if (selectedFileName == null) {
-    <p class="font-poppins text-3xl mt-4"> Select a file to upload </p>
+    <p class="font-poppins text-xl text-gray-500 mt-4"> Select a file to upload </p>
     } @else {
     <div class="flex flex-row items-center">
       <img src="excel.png" alt="Excel Logo" class="w-10 mr-4">
-      <p class="font-poppins text-3xl mt-4">{{ selectedFileName }}</p>
+      <p class="font-poppins text-xl text-gray-500 mt-4">{{ selectedFileName }}</p>
     </div>
     }
     }
-
   </div>
   <canvas id="canvas" class="absolute top-0 left-0 z-0"></canvas>
 </main>

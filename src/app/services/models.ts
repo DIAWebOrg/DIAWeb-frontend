@@ -7,3 +7,8 @@ export interface DataToSubmit {
   // this is what the API expects
   data: number[] | null;
 }
+
+export interface DataProcessedEvent { // data to emit from the DataProcessingService to the component
+  transformedData: DataToSubmit;
+  selectedFileName: string;
+}

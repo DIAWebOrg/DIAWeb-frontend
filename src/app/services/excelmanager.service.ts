@@ -7,23 +7,33 @@ import { ExcelData, DataToSubmit } from './models';
 })
 export class ExcelManagerService {
 
-  readExcel(file: File): Promise<{ excelData: ExcelData }> {
+  async readExcel(file: File): Promise<{ excelData: ExcelData }> {
+    try {
+      const data = await this.readFileAsArrayBuffer(file);
+      const workBook = XLSX.read(data, { type: 'array' });
+      const jsonData = this.processWorkbook(workBook);
+      return { excelData: jsonData };
+    } catch (error) {
+      throw new Error(`Failed to read file: ${error}`);
+    }
+  }
+
+  private readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (event: ProgressEvent<FileReader>) => {
         const data = event.target?.result;
-        if (typeof data === 'string' || data instanceof ArrayBuffer) {
-          const workBook = XLSX.read(data, { type: 'binary' });
-          const jsonData = this.processWorkbook(workBook);
-          resolve({ excelData: jsonData });
+        if (data instanceof ArrayBuffer) {
+          resolve(data);
         } else {
-          reject('Failed to read file');
+          reject('File data is not an ArrayBuffer');
         }
       };
+      reader.onerror = (event) => reject(event.target?.error);
       reader.readAsArrayBuffer(file);
     });
   }
-
+  
   processWorkbook(workBook: XLSX.WorkBook): ExcelData {
     const excelData: ExcelData = { excelData: {} };
     workBook.SheetNames.forEach((name) => {

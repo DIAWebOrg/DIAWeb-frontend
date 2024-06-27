@@ -1,15 +1,4 @@
-.no-arrows::-webkit-inner-spin-button,
-  .no-arrows::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  .no-arrows {
-    -moz-appearance: textfield; /* only for firefox */
-    appearance: none; /* the same as -moz-appearance but for all browsers */
-    font-size: 24px;
-  }
-
-  /* animation for the button */
+/* animation for the button */
 .btn:link,
 .btn:visited {
     text-transform: uppercase;
@@ -32,8 +21,8 @@
 }
 
 .btn-white {
-    background-color: #fff;
-    color: #777;
+    background-color: white;
+    color: gray;
 }
 
 .btn::after {
@@ -50,7 +39,7 @@
 }
 
 .btn-white::after {
-    background-color: #fff;
+    background-color: white;
 }
 
 .btn:hover::after {
@@ -73,4 +62,10 @@
         opacity: 1;
         transform: translateY(0px);
     }
+}
+
+.smooth-border:focus { /*only for the "neon" border, not possible w tailwind*/
+    box-shadow: 0 0 15px purple, 0 0 15px purple, 0 0 15px purple, 0 0 15px purple;
+    transition: box-shadow 0.3s ease-in-out;
+    outline: none;
 }

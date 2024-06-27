@@ -4,16 +4,19 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class FileValidatorService {
-  isValidFile(file: File): boolean {
+  isValidFile(file: File): { isValid: boolean; message: string } {
     const validTypes = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'application/vnd.ms-excel',
     ];
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (!validTypes.includes(file.type) || file.size > maxSize) {
-      console.error('Invalid file type or size.');
-      return false;
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    if (!validTypes.includes(file.type)) {
+      return { isValid: false, message: 'Invalid file type.' };
     }
-    return true;
+    if (file.size > maxSize) {
+      return { isValid: false, message: 'File size exceeds the maximum limit.' };
+    }
+    return { isValid: true, message: 'File is valid.' };
   }
 }
