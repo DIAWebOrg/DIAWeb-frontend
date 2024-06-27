@@ -9,6 +9,8 @@ describe('AppComponent', () => {
   let httpClientSpy: { post: jasmine.Spy };
 
   beforeEach(async () => {
+    // Set the API key in localStorage
+    localStorage.setItem('X-API-KEY', 'dummy-api-key');
     // Create an instance of the component
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
     await TestBed.configureTestingModule({
@@ -19,6 +21,11 @@ describe('AppComponent', () => {
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
+  });
+
+  afterEach(() => {
+    // Clear the localStorage after each test
+    localStorage.removeItem('X-API-KEY');
   });
 
   // frontend tests
@@ -43,7 +50,6 @@ describe('AppComponent', () => {
     const expectedResponse = 1.23; // Directly use the expected number
     httpClientSpy.post.and.returnValue(of({ prediction: [[{ toFixed: () => 1.23 }]] }));
     component.submitProfile();
-    console.log('apiResponse after submitProfile:', component.apiResponse);
     expect(component.apiResponse).withContext('apiResponse should be updated').toEqual(expectedResponse);
-  }));
+  }));  
 });
