@@ -23,11 +23,7 @@ export class ExcelManagerService {
       const reader = new FileReader();
       reader.onload = (event: ProgressEvent<FileReader>) => {
         const data = event.target?.result;
-        if (data instanceof ArrayBuffer) {
-          resolve(data);
-        } else {
-          reject('File data is not an ArrayBuffer');
-        }
+        data instanceof ArrayBuffer ? resolve(data) : reject('File data is not an ArrayBuffer');
       };
       reader.onerror = (event) => reject(event.target?.error);
       reader.readAsArrayBuffer(file);

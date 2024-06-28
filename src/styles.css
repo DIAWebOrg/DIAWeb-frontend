@@ -5,3 +5,22 @@
 body {
     margin: 0;
 }
+
+.custom-snack-bar {
+    width: 400 px;
+    position: fixed;
+    bottom: 0;
+    left: calc(50% - 200px);
+    background-color: whitesmoke;
+    color: gray;
+    border-radius: 20px;
+}
+
+.custom-snack-bar button {
+    border-radius: 10px;
+    background-color: red;
+    /*smth was overriding it?*/
+    color: white !important;
+}
+
+

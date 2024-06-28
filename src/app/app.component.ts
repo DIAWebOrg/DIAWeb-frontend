@@ -5,6 +5,7 @@ import { ApiService } from './services/api.service';
 import { DataProcessingService } from './services/dataprocessing.service';
 import { DataToSubmit } from './services/models';
 import { ScriptLoaderService } from './services/scriptloader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private scriptLoaderService: ScriptLoaderService,
     private apiService: ApiService,
     private dataProcessingService: DataProcessingService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -37,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.apiKey) {
       this.getRemainingAPIRequests(this.apiKey);
     }
-    
+
     this.scriptLoaderService.loadScript('animation.js');
 
     this.subscriptions.add(this.dataProcessingService.dataProcessed.subscribe(data => {
@@ -56,7 +58,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onFileChange(event: Event) {
     this.dataProcessingService.onFileChange(event).subscribe({
-      error: (e) => alert(e)
+      error: (e) => this.snackBar.open(e, 'Close', {
+        duration: 5000,
+        panelClass: ['custom-snack-bar']
+      })
     });
 
   }
@@ -71,7 +76,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiResponse = data;
         this.remainingAPIRequests = (this.remainingAPIRequests as number) - 1;
       },
-      error: (e) => alert(e)
+      error: (e) => this.snackBar.open(e, 'Close', {
+        /*duration: 5000,*/
+        panelClass: ['custom-snack-bar']
+      })
     });
   }
 
@@ -88,9 +96,10 @@ export class AppComponent implements OnInit, OnDestroy {
           this.apiKey = license; // Update the apiKey property with the new value
           this.remainingAPIRequests = data;
         },
-        error: (error) => {
-          alert(error);
-        }
+        error: (e) => this.snackBar.open(e, 'Close', {
+          duration: 5000,
+          panelClass: ['custom-snack-bar']
+        })
       });
     }
   }
