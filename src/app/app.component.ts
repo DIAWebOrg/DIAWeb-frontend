@@ -57,13 +57,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onFileChange(event: Event) {
+    const element = event.target as HTMLInputElement;
     this.dataProcessingService.onFileChange(event).subscribe({
-      error: (e) => this.snackBar.open(e, 'Close', {
+      error: (e) => this.snackBar.open(e, '', {
         duration: 5000,
         panelClass: ['custom-snack-bar']
       })
     });
-
+    if (element) {
+      element.value = '';
+    }
   }
 
   triggerFileUpload(): void {
@@ -75,12 +78,15 @@ export class AppComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.apiResponse = data;
         this.remainingAPIRequests = (this.remainingAPIRequests as number) - 1;
+        this.selectedFileName = null;
       },
-      error: (e) => this.snackBar.open(e, 'Close', {
-        /*duration: 5000,*/
-        panelClass: ['custom-snack-bar']
+      error: (e) => this.snackBar.open(e, '', {
+        duration: 5000,
+        panelClass: ['custom-snack-bar'],
       })
     });
+
+
   }
 
   submitApiKey(license: string, inputElement: HTMLInputElement) {
@@ -96,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.apiKey = license; // Update the apiKey property with the new value
           this.remainingAPIRequests = data;
         },
-        error: (e) => this.snackBar.open(e, 'Close', {
+        error: (e) => this.snackBar.open(e, '', {
           duration: 5000,
           panelClass: ['custom-snack-bar']
         })

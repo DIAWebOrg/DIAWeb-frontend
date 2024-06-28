@@ -17,12 +17,14 @@ export class DataProcessingService {
     ) { }
 
     onFileChange(event: Event): Observable<{ transformedData: DataToSubmit; selectedFileName: string } | string> {
+        
         const target = event.target as HTMLInputElement;
         if (!target.files?.length) {
             return throwError(() => new Error('No file selected.'));
         }
     
         const file = target.files[0];
+        
         const isValid = this.fileValidatorService.isValidFile(file).isValid;
         
         if (!isValid) {

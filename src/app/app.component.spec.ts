@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -15,7 +16,7 @@ describe('AppComponent', () => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
     await TestBed.configureTestingModule({
       // Provide both the component and the mock HttpClient
-      imports: [AppComponent],
+      imports: [NoopAnimationsModule, AppComponent],
       providers: [{ provide: HttpClient, useValue: httpClientSpy }]
     }).compileComponents();
 

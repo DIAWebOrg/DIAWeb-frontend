@@ -7,6 +7,7 @@ body {
 }
 
 .custom-snack-bar {
+    text-align: center;
     width: 400 px;
     position: fixed;
     bottom: 0;
@@ -15,12 +16,3 @@ body {
     color: gray;
     border-radius: 20px;
 }
-
-.custom-snack-bar button {
-    border-radius: 10px;
-    background-color: red;
-    /*smth was overriding it?*/
-    color: white !important;
-}
-
-

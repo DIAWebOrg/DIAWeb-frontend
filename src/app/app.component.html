@@ -38,10 +38,10 @@
     </div>
 
     <!-- API Response or File Selection Info -->
-    @if (apiResponse) {
+    @if (apiResponse && selectedFileName === null) {
     <pre class="font-poppins text-xl text-gray-500 mt-4">{{ apiResponse | json }}</pre>
     } @else {
-    @if (selectedFileName == null) {
+    @if (selectedFileName === null) {
     <p class="font-poppins text-xl text-gray-500 mt-4"> Select a file to upload </p>
     } @else {
     <div class="flex flex-row items-center">

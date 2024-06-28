@@ -58,7 +58,7 @@ DIAWeb is a web application that allows the user to calculate their risk of suff
 You can install the project's dependencies specified in the `package.json` file. Run the following command:
 
 ```bash
-npm install
+pnpm install
 ```
 
 This will install all the necessary packages for this project.
@@ -68,7 +68,7 @@ This will install all the necessary packages for this project.
 To run the project, run
 
 ```bash
-npm run start
+pnpm run start
 ```
 
 ## Contact data
