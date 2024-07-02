@@ -26,7 +26,6 @@ DIAWeb is a web application that allows the user to calculate their risk of suff
 ## Project structure
 
 - `.github/`: Contains dependabot configuration along with workflow file
-- `.idx/`: Contains the file to build the development environment using nix package manager
 - `public/`: Contains media assets
 - `src/`: Main folder that contains the source code
   - `app/`: The core of the application where all Angular components, services, and models are
