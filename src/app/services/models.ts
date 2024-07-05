@@ -3,6 +3,10 @@ export interface ExcelData {
   excelData: { [sheetName: string]: Array<{ [key: string]: number }> };
 }
 
+export interface DataToSubmitUnprocessed { 
+  [key: string]: number;
+}
+
 export interface DataToSubmit {
   // this is what the API expects
   data?: number[] | null; 
@@ -11,8 +15,9 @@ export interface DataToSubmit {
 }
 
 export interface APIResponse {
-  prediction: number [][];
+  prediction?: number [][];
   remaining_requests: number;
+  error?: string;
 }
 
 export interface DataProcessedEvent { // data to emit from the DataProcessingService to the component

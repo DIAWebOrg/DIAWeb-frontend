@@ -5,11 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class FileValidatorService {
   isValidFile(file: File): { isValid: boolean; message: string } {
-    const validTypes = [
+    const validTypes : string[] = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'application/vnd.ms-excel',
     ];
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize : number = 10 * 1024 * 1024; // 10MB
 
     if (!validTypes.includes(file.type)) {
       return { isValid: false, message: 'Invalid file type.' };

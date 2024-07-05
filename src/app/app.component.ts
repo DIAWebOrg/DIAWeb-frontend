@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   }
 
   onFileChange(event: Event) {
-    const element = event.target as HTMLInputElement;
+    const element : HTMLInputElement = event.target as HTMLInputElement;
     this.dataProcessingService.onFileChange(event).subscribe({
       next: (dataProcessedEvent) => {
 
@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
   submitProfile() { // profile as in "biochemical profile"
     this.apiService.submitProfile(this.dataToSubmit).subscribe({
       next: (apiResponse) => {
-        this.prediction = parseFloat(apiResponse.prediction[0][0].toFixed(2));
+        this.prediction = parseFloat(apiResponse.prediction ? apiResponse.prediction[0][0].toFixed(2) : '');
         this.remainingRequests = apiResponse.remaining_requests;
         this.selectedFileName = null;
       },

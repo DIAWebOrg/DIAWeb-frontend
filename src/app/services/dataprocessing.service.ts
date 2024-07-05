@@ -18,13 +18,13 @@ export class DataProcessingService {
 
     onFileChange(event: Event): Observable<DataProcessedEvent> {
 
-        const target = event.target as HTMLInputElement;
+        const target : HTMLInputElement = event.target as HTMLInputElement;
         if (!target.files?.length) {
             return throwError(() => new Error('No file selected.'));
         }
 
-        const file = target.files[0];
-        const isValid = this.fileValidatorService.isValidFile(file).isValid;
+        const file : File = target.files[0];
+        const isValid : boolean = this.fileValidatorService.isValidFile(file).isValid;
 
         if (!isValid) {
             return throwError(() => new Error('Invalid file type or size.'));
@@ -32,8 +32,8 @@ export class DataProcessingService {
 
         return from(this.excelManagerService.readExcel(file)).pipe(
             map((value: { excelData: ExcelData }) => {
-                const transformedData = this.excelManagerService.transformData(value.excelData);
-                const result = {
+                const transformedData : number[] = this.excelManagerService.transformData(value.excelData);
+                const result : DataProcessedEvent = {
                     transformedData: transformedData,
                     selectedFileName: file.name
                 };

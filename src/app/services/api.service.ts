@@ -6,9 +6,9 @@ import { DataToSubmit, APIResponse } from './models';
   providedIn: 'root',
 })
 export class ApiService {
-  socket = new WebSocket('ws://127.0.0.1:8000/ws/predict_diabetes/');
+  socket : WebSocket = new WebSocket('ws://127.0.0.1:8000/ws/predict_diabetes/');
 
-  private onDataReceivedSubject = new Subject<APIResponse>();
+  private onDataReceivedSubject : Subject<APIResponse> = new Subject<APIResponse>();
   onDataReceived = this.onDataReceivedSubject.asObservable();
 
   submitProfile(dataToSubmit: DataToSubmit | null): Observable<APIResponse> {
@@ -18,7 +18,7 @@ export class ApiService {
     return new Observable<APIResponse>((subscriber) => {
       // receiver method
       this.socket.onmessage = (event) => {
-        const response = JSON.parse(event.data);
+        const response : APIResponse = JSON.parse(event.data);
         if (response.error) {
           subscriber.error(response.error);
         }
@@ -40,7 +40,7 @@ export class ApiService {
     return new Observable<number>((subscriber) => {
       // receiver method
       this.socket.onmessage = (event) => {
-        const response = JSON.parse(event.data);
+        const response : APIResponse= JSON.parse(event.data);
         // handle error messages:
         if (response.error) {
           subscriber.error(response.error);
