@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError, from, Subject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ExcelManagerService } from './excelmanager.service';
-import { FileValidatorService } from './filevalidator.service'; 
+import { FileValidatorService } from './filevalidator.service';
 import { DataToSubmit, ExcelData, DataProcessedEvent } from './models';
 
 @Injectable({
@@ -10,23 +10,22 @@ import { DataToSubmit, ExcelData, DataProcessedEvent } from './models';
 })
 export class DataProcessingService {
     dataProcessed = new Subject<DataProcessedEvent>();
-    
+
     constructor(
         private excelManagerService: ExcelManagerService,
-        private fileValidatorService: FileValidatorService 
+        private fileValidatorService: FileValidatorService
     ) { }
 
-    onFileChange(event: Event): Observable<{ transformedData: DataToSubmit; selectedFileName: string } | string> {
-        
+    onFileChange(event: Event): Observable<DataProcessedEvent> {
+
         const target = event.target as HTMLInputElement;
         if (!target.files?.length) {
             return throwError(() => new Error('No file selected.'));
         }
-    
+
         const file = target.files[0];
-        
         const isValid = this.fileValidatorService.isValidFile(file).isValid;
-        
+
         if (!isValid) {
             return throwError(() => new Error('Invalid file type or size.'));
         }
@@ -39,10 +38,10 @@ export class DataProcessingService {
                     selectedFileName: file.name
                 };
                 this.dataProcessed.next(result);
-                return result; // apart from emitting the data, return it as well because the caller from the component needs it
+                return result; // apart from emitting the data, return it as well because the caller from the component needs it to do .subscribe() on it
             }),
             catchError(error => {
-                return of(error); 
+                return of(error);
             })
         );
     }

@@ -26,14 +26,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pnpm-
 
-    - name: Create environment file
-      run: |
-        mkdir -p src/environments/
-        echo "export const environment = {" > src/environments/environment.ts
-        echo "  supabaseUrl: '${{ secrets.SUPABASE_URL }}'," >> src/environments/environment.ts
-        echo "  supabaseKey: '${{ secrets.SUPABASE_KEY }}'" >> src/environments/environment.ts
-        echo "};" >> src/environments/environment.ts
-
     - name: Install dependencies
       run: pnpm install
 

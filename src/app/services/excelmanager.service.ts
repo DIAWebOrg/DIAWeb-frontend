@@ -29,7 +29,7 @@ export class ExcelManagerService {
       reader.readAsArrayBuffer(file);
     });
   }
-  
+
   processWorkbook(workBook: XLSX.WorkBook): ExcelData {
     const excelData: ExcelData = { excelData: {} };
     workBook.SheetNames.forEach((name) => {
@@ -40,9 +40,10 @@ export class ExcelManagerService {
     return excelData;
   }
 
-  transformData(jsonData: ExcelData): DataToSubmit {
+  transformData(jsonData: ExcelData): number[] {
     const dataToSubmit = jsonData.excelData[Object.keys(jsonData.excelData)[0]][0];
     const { CP_numero, CP_codigo, meses, incidencia, CP, ...attributes } = dataToSubmit;
-    return { data: Object.values(attributes) };
+    return Object.values(attributes).map((value) => Number(value));
+    // the api key and action will be added later (this one is not used but its here because of the interface)
   }
 }

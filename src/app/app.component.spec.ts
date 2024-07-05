@@ -1,56 +1,55 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
-import { AppComponent } from './app.component';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Socket } from 'ngx-socket-io';
+import { Subject } from 'rxjs';
+import { AppComponent } from './app.component';
+import { APIResponse } from './services/models';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let httpClientSpy: { post: jasmine.Spy };
+  let mockSocket: any;
+  let onDataReceivedSubject: Subject<APIResponse>;
 
   beforeEach(async () => {
-    // Set the API key in localStorage
-    localStorage.setItem('X-API-KEY', 'dummy-api-key');
-    // Create an instance of the component
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
+    onDataReceivedSubject = new Subject<APIResponse>();
+    mockSocket = {
+      emit: jasmine.createSpy('emit'),
+      fromEvent: jasmine.createSpy('fromEvent').and.returnValue(onDataReceivedSubject.asObservable()),
+      on: jasmine.createSpy('on')
+    };
+
     await TestBed.configureTestingModule({
-      // Provide both the component and the mock HttpClient
-      imports: [NoopAnimationsModule, AppComponent],
-      providers: [{ provide: HttpClient, useValue: httpClientSpy }]
+      imports: [NoopAnimationsModule, AppComponent], 
+      providers: [{ provide: Socket, useValue: mockSocket }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
   });
 
-  afterEach(() => {
-    // Clear the localStorage after each test
-    localStorage.removeItem('X-API-KEY');
-  });
-
-  // frontend tests
   it('should create the app', () => {
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
   it(`should have the 'DIAWeb' title`, () => {
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('DIAWeb');
+    expect(component.title).toEqual('DIAWeb');
   });
 
-  // backend tests
-  it('should call HttpClient.post on submitProfile', () => {
-    httpClientSpy.post.and.returnValue(of({}));
+  it('should emit data to the server on submitProfile', () => {
+    const testData = { data: [1, 2, 3] };
+    component.dataToSubmit = testData;
     component.submitProfile();
-    expect(httpClientSpy.post.calls.count()).withContext('one call').toBe(1);
+    expect(mockSocket.emit).toHaveBeenCalledWith('predict_diabetes', testData);
   });
 
-  it('should update apiResponse after HttpClient.post', fakeAsync(() => {
-    const expectedResponse = 1.23; // Directly use the expected number
-    httpClientSpy.post.and.returnValue(of({ prediction: [[{ toFixed: () => 1.23 }]] }));
+  it('should handle prediction response from the server', fakeAsync(() => {
+    const expectedResponse = { prediction: 1.23, remaining_requests: 10 }; 
     component.submitProfile();
-    expect(component.apiResponse).withContext('apiResponse should be updated').toEqual(expectedResponse);
-  }));  
+  
+    // Simulate receiving a prediction from the server
+    onDataReceivedSubject.next(expectedResponse);
+    
+    expect(component.apiResponse).toEqual(expectedResponse.prediction);
+  }));
 });

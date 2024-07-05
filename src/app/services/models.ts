@@ -5,10 +5,17 @@ export interface ExcelData {
 
 export interface DataToSubmit {
   // this is what the API expects
-  data: number[] | null;
+  data?: number[] | null; 
+  action: string | null;
+  api_key: string | null;
+}
+
+export interface APIResponse {
+  prediction: number [][];
+  remaining_requests: number;
 }
 
 export interface DataProcessedEvent { // data to emit from the DataProcessingService to the component
-  transformedData: DataToSubmit;
+  transformedData: number[];
   selectedFileName: string;
 }

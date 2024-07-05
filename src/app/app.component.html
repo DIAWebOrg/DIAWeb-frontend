@@ -18,7 +18,7 @@
     <!-- Remaining API requests -->
     <div class="font-poppins text-xl text-gray-500">
       @if (apiKey) {
-      <p>{{ remainingAPIRequests }} uses left.</p>
+      <p>{{ remainingRequests }} uses left.</p>
       } @else {
       <p>No license detected</p>
       }
@@ -38,8 +38,8 @@
     </div>
 
     <!-- API Response or File Selection Info -->
-    @if (apiResponse && selectedFileName === null) {
-    <pre class="font-poppins text-xl text-gray-500 mt-4">{{ apiResponse | json }}</pre>
+    @if (prediction && selectedFileName === null) {
+    <pre class="font-poppins text-xl text-gray-500 mt-4">{{ prediction | json }}</pre>
     } @else {
     @if (selectedFileName === null) {
     <p class="font-poppins text-xl text-gray-500 mt-4"> Select a file to upload </p>

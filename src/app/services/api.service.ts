@@ -1,75 +1,56 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { DataToSubmit } from './models';
-import { supabase } from './supabase.service';
-
-interface ApiResponse {
-  prediction: number[][];
-}
+import { DataToSubmit, APIResponse } from './models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  onDataReceived: Subject<number> = new Subject<number>();
+  socket = new WebSocket('ws://127.0.0.1:8000/ws/predict_diabetes/');
 
-  constructor(private http: HttpClient) { }
+  private onDataReceivedSubject = new Subject<APIResponse>();
+  onDataReceived = this.onDataReceivedSubject.asObservable();
 
-  submitProfile(dataToSubmit: DataToSubmit | null): Observable<number> {
-    const apiKey = localStorage.getItem('X-API-KEY');
-    if (!apiKey) {
-      return throwError(() => new Error('API key is missing'));
-    }
+  submitProfile(dataToSubmit: DataToSubmit | null): Observable<APIResponse> {
+    // sender method
+    this.socket.send(JSON.stringify(dataToSubmit));
+    // i need to return this because the caller from the components wants to do .subscribe() on it
+    return new Observable<APIResponse>((subscriber) => {
+      // receiver method
+      this.socket.onmessage = (event) => {
+        const response = JSON.parse(event.data);
+        if (response.error) {
+          subscriber.error(response.error);
+        }
 
-    const headers = new HttpHeaders().set('X-API-KEY', apiKey);
-
-    return this.http.post<ApiResponse>('http://127.0.0.1:8000/predict_diabetes', dataToSubmit, { headers })
-      .pipe(
-        map(response => {
-          if (response.prediction) {
-            return parseFloat(response.prediction[0][0].toFixed(2));
-          }
-          throw new Error('Invalid response structure');
-        }),
-        catchError((error) => { // backend error handling (they are not supposed to be thrown ever)
-          let errorMessage = 'An unexpected error occurred';
-          switch (error.status) {
-            case 401:
-              errorMessage = 'API key required';
-              break;
-            case 400:
-              errorMessage = 'Invalid API key format';
-              break;
-            case 404:
-              errorMessage = 'API key not found';
-              break;
-            case 429:
-              errorMessage = 'Rate limit exceeded';
-              break;
-          }
-          return throwError(() => new Error(errorMessage));
-        })
-      );
+        else {
+          subscriber.next(response);
+        }
+      };
+    })
   }
 
-  getRemainingAPIRequests(apiKey: string): Observable<number> {
+  getRemainingRequests(apiKey: string): Observable<number> {
+    // called on init and with each api key submit
+    // sender method
+    const dataToSubmit: DataToSubmit = { action: 'check_remaining_requests', api_key: apiKey };
 
-    return new Observable((subscriber) => {
-      supabase
-        .from('myapp_apikey')
-        .select('remaining_requests')
-        .eq('api_key', `${apiKey}`)
-        .then((response: any) => {
-          if (response.status === 200 && response.data.length > 0) {
-            const remainingAPIRequests = parseInt(response.data[0].remaining_requests, 10);
-            subscriber.next(remainingAPIRequests);
-            subscriber.complete();
-          } else {
-            subscriber.error(new Error('API key not found')); // not existing in supabase database
-          }
-        });
-    });
+    this.socket.send(JSON.stringify(dataToSubmit));
+
+    return new Observable<number>((subscriber) => {
+      // receiver method
+      this.socket.onmessage = (event) => {
+        const response = JSON.parse(event.data);
+        // handle error messages:
+        if (response.error) {
+          subscriber.error(response.error);
+        }
+
+        else {
+          const remainingRequests = response.remaining_requests;
+          subscriber.next(remainingRequests);
+        }
+      }
+    })
   }
 }
