@@ -68,6 +68,7 @@ export class AppComponent implements OnInit {
   submitProfile() { // profile as in "biochemical profile"
     this.apiService.submitProfile(this.dataToSubmit).subscribe({
       next: (apiResponse) => {
+        
         this.prediction = parseFloat(apiResponse.prediction ? apiResponse.prediction[0][0].toFixed(2) : '');
         this.remainingRequests = apiResponse.remaining_requests;
         this.selectedFileName = null;
@@ -80,6 +81,7 @@ export class AppComponent implements OnInit {
   }
 
   submitApiKey(license: string, inputElement: HTMLInputElement) {
+    localStorage.setItem('X-API-KEY', license);
     this.getRemainingRequests(license); // Update the remaining API calls immediately
     inputElement.value = ''; // Clear the input box
   }
@@ -88,7 +90,6 @@ export class AppComponent implements OnInit {
     // this is called on init and on each api key submission
     this.apiService.getRemainingRequests(license).subscribe({
       next: (data) => {
-        localStorage.setItem('X-API-KEY', license);
         this.apiKey = license; // Update the apiKey property with the new value
         this.remainingRequests = data;
       },
