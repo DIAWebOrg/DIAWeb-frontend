@@ -18,6 +18,7 @@ export interface APIResponse {
   prediction?: number [][];
   remaining_requests: number;
   error?: string;
+  // we dont use the field "status"
 }
 
 export interface DataProcessedEvent { // data to emit from the DataProcessingService to the component
