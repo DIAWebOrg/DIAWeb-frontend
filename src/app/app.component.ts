@@ -102,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.apiKey = license; // Update the apiKey property with the new value
           this.remainingAPIRequests = data;
         },
-        error: (e) => this.snackBar.open(e, '', {
+        error: (e) => this.snackBar.open(e.error.error, '', {
           duration: 5000,
           panelClass: ['custom-snack-bar']
         })

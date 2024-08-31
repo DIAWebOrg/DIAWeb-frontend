@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { DataToSubmit } from './models';
-import { supabase } from './supabase.service';
 
 interface ApiResponse {
   prediction: number[][];
@@ -20,7 +19,11 @@ export class ApiService {
   submitProfile(dataToSubmit: DataToSubmit | null): Observable<number> {
     const apiKey = localStorage.getItem('X-API-KEY');
     if (!apiKey) {
-      return throwError(() => new Error('API key is missing'));
+      return throwError(() => new Error('License is missing'));
+    }
+
+    if (!dataToSubmit?.data) {
+      return throwError(() => new Error('Data is missing'));
     }
 
     const headers = new HttpHeaders().set('X-API-KEY', apiKey);
@@ -54,22 +57,13 @@ export class ApiService {
       );
   }
 
-  getRemainingAPIRequests(apiKey: string): Observable<number> {
+  getRemainingAPIRequests(apiKey: string): Observable<any> {
+    const body = { api_key: apiKey };
+    return this.http.post<any>('http://127.0.0.1:8000/remaining_requests', body).pipe(
+      map(response => {
+        return response.remaining_requests 
+      })
+    );
 
-    return new Observable((subscriber) => {
-      supabase
-        .from('myapp_apikey')
-        .select('remaining_requests')
-        .eq('api_key', `${apiKey}`)
-        .then((response: any) => {
-          if (response.status === 200 && response.data.length > 0) {
-            const remainingAPIRequests = parseInt(response.data[0].remaining_requests, 10);
-            subscriber.next(remainingAPIRequests);
-            subscriber.complete();
-          } else {
-            subscriber.error(new Error('API key not found')); // not existing in supabase database
-          }
-        });
-    });
   }
 }
